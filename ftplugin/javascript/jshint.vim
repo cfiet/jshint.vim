@@ -1,4 +1,3 @@
-
 " Global Options
 "
 " Enable/Disable highlighting of errors in source.
@@ -70,7 +69,7 @@ let s:plugin_path = s:install_dir . "/jshint/"
 if has('win32')
   let s:plugin_path = substitute(s:plugin_path, '/', '\', 'g')
 endif
-let s:cmd = "cd " . s:plugin_path . " && ./runner.js"
+let s:cmd = "node " . s:plugin_path . "runner.js"
 
 " FindRc() will try to find a .jshintrc up the current path string
 " If it cannot find one it will try looking in the home directory
@@ -82,7 +81,7 @@ if !exists("*s:FindRc")
     let l:jshintrc_file = fnamemodify('.jshintrc', ':p')
     if filereadable(l:jshintrc_file)
       let s:jshintrc_file = l:jshintrc_file
-    elseif len(a:path) > 1
+    elseif ((!has('win32') && len(a:path) > 1) || (has('win32') && len(a:path) > 3))
       call s:FindRc(fnamemodify(a:path, ":h:h"))
     else
       let l:jshintrc_file = expand('~') . l:filename
